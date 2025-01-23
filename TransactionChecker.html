@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Reference Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .output p {
+            text-align: left;
+            line-height: 1.6;
+        }
+        .status {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Transaction Reference Checker</h2>
+        <label for="numberInput">Enter Number:</label>
+        <input type="text" id="numberInput" placeholder="Enter number">
+        <label for="referenceInput">Enter Transaction Reference:</label>
+        <input type="text" id="referenceInput" placeholder="Enter transaction reference">
+        <button onclick="checkTransaction()">Check Transaction</button>
+        <div id="output" class="output"></div>
+        <div id="statusMessage" class="status"></div>
+    </div>
+
+    <script>
+        // Predefined data with name, batch, and number
+        const users = [
+            { number: "001", name: "John Doe", batch: "Batch A" },
+            { number: "002", name: "Jane Smith", batch: "Batch B" },
+            { number: "003", name: "Alice Johnson", batch: "Batch C" },
+        ];
+
+        // Array to store transaction references
+        const enteredReferences = [];
+
+        function checkTransaction() {
+            const number = document.getElementById('numberInput').value.trim();
+            const reference = document.getElementById('referenceInput').value.trim();
+            const output = document.getElementById('output');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Reset output areas
+            output.innerHTML = '';
+            statusMessage.innerHTML = '';
+
+            // Validate input fields
+            if (!number || !reference) {
+                statusMessage.innerHTML = `<p style="color: red;">Please fill in both the number and transaction reference.</p>`;
+                return;
+            }
+
+            // Find the user by number
+            const user = users.find(user => user.number === number);
+
+            if (!user) {
+                statusMessage.innerHTML = `<p style="color: red;">Invalid number. No user found with number <strong>${number}</strong>.</p>`;
+                return;
+            }
+
+            // Check if the reference is already entered
+            let statusText = '';
+            if (enteredReferences.includes(reference)) {
+                statusText = `<p style="color: red;">Transaction reference <strong>${reference}</strong> has already been used.</p>`;
+            } else {
+                // Add the new transaction reference
+                enteredReferences.push(reference);
+                statusText = `<p style="color: green;">Transaction reference <strong>${reference}</strong> is new and has been recorded.</p>`;
+            }
+
+            // Display user details
+            output.innerHTML = `
+                <p>
+                    Name: <strong>${user.name}</strong><br>
+                    Batch: <strong>${user.batch}</strong><br>
+                    Number: <strong>${user.number}</strong><br>
+                    Reference: <strong>${reference}</strong>
+                </p>
+            `;
+
+            // Display status message at the bottom
+            statusMessage.innerHTML = statusText;
+
+            // Clear the input fields
+            document.getElementById('numberInput').value = '';
+            document.getElementById('referenceInput').value = '';
+        }
+    </script>
+</body>
+</html>
